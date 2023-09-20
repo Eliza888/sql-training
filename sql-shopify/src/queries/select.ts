@@ -1,4 +1,4 @@
-import { APPS_CATEGORIES, CATEGORIES } from "../shopify-table-names";
+import { APPS, APPS_CATEGORIES, CATEGORIES, REVIEWS } from "../shopify-table-names";
 
 export const selectCount = (table: string): string => {
   return `SELECT COUNT(*) AS count FROM ${table};`;
@@ -14,12 +14,11 @@ export const selectCategoryByTitle = (title: string): string => {
 }
 
 export const selectAppCategoriesByAppId = (appId: number): string => {
-  return `
-    SELECT apps.*, apps_categories.*
-    FROM ${APPS_CATEGORIES}
-    JOIN apps ON apps.id = ${APPS_CATEGORIES}.app_id
-    WHERE ${APPS_CATEGORIES}.app_id = ${appId};
-  `;
+  return `SELECT category_id ${CATEGORIES}.title as category_title, ${APPS}.title as app_title
+  FROM ${APPS_CATEGORIES}
+  INNER JOIN ${APPS} ON ${APPS_CATEGORIES}.app_id = ${APPS}.id
+  INNER JOIN ${CATEGORIES} ON ${APPS_CATEGORIES}.category_id = ${CATEGORIES}.id
+  WHERE app_id = ${appId}`;
 }
 
 export const selectUnigueRowCount = (tableName: string, columnName: string): string => {
@@ -27,7 +26,7 @@ export const selectUnigueRowCount = (tableName: string, columnName: string): str
 };
 
 export const selectReviewByAppIdAuthor = (appId: number, author: string): string => {
-  return `SELECT * FROM reviews WHERE app_id = ${appId} AND author = '${author}';`;
+  return `SELECT * FROM ${REVIEWS} WHERE app_id = ${appId} AND author = '${author}';`;
 };
 
 export const selectColumnFromTable = (columnName: string, tableName: string): string => {
