@@ -28,6 +28,7 @@ export interface KeyBenefit {
 }
 
 export interface PricingPlan {
+    appid: any;
     shopifyAppId: number;
     price: string;
 }

@@ -1,3 +1,5 @@
+import { APPS_CATEGORIES, CATEGORIES } from "../shopify-table-names";
+
 export const selectCount = (table: string): string => {
   return `SELECT COUNT(*) AS count FROM ${table};`;
 };
@@ -8,12 +10,17 @@ export const selectRowById = (id: number, table: string): string => {
 ;
 
 export const selectCategoryByTitle = (title: string): string => {
-  return `SELECT * FROM categories WHERE title = '${title}';`;
+  return `SELECT * FROM ${CATEGORIES} WHERE title = '${title}';`;
 }
 
 export const selectAppCategoriesByAppId = (appId: number): string => {
-  return `SELECT * FROM apps_categories WHERE app_id = ${appId};`;
-};
+  return `
+    SELECT apps.*, apps_categories.*
+    FROM ${APPS_CATEGORIES}
+    JOIN apps ON apps.id = ${APPS_CATEGORIES}.app_id
+    WHERE ${APPS_CATEGORIES}.app_id = ${appId};
+  `;
+}
 
 export const selectUnigueRowCount = (tableName: string, columnName: string): string => {
   return `SELECT COUNT(DISTINCT ${columnName}) AS count FROM ${tableName};`;
