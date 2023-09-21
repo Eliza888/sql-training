@@ -115,22 +115,23 @@ describe("Insert Data", () => {
     },
     minutes(1));
 
-    it("should insert categories data", async done => {
-        const categories = await ShopifyCsvLoader.categories();
-        await db.insert(insertCategories(categories));
 
-        const count = await db.selectSingleRow(selectCount(CATEGORIES));
-        expect(count.c).toBe(12);
+ it("should insert categories data", async done => {
+    const categories = await ShopifyCsvLoader.categories();
+    await db.insert(insertCategories(categories));
 
-        const row = await db.selectSingleRow(selectRowById(5, CATEGORIES));
-        expect(row.title).toEqual("Customer support");
+    const count = await db.selectSingleRow(selectCount(CATEGORIES));
+    expect(count.c).toBe(12);
 
-        const rowByTitle = await db.selectSingleRow(selectCategoryByTitle("Places to sell"));
-        expect(rowByTitle.id).toEqual(12);
+    const row = await db.selectSingleRow(selectRowById(5, CATEGORIES));
+    expect(row.title).toEqual("Customer support");
 
-        done();
-    },
-    minutes(1));
+    const rowByTitle = await db.selectSingleRow(selectCategoryByTitle("Places to sell"));
+    expect(rowByTitle.id).toEqual(12);
+
+    done();
+},
+minutes(1));
 
     it("should insert app categories data", async done => {
         const appCategories = await ShopifyCsvLoader.appCategories();
